@@ -1,6 +1,6 @@
 faiss-cpu
 fastapi
-langchain
+langchain==0.2.14
 langchain_community
 langchain-openai
 langchain-upstage
