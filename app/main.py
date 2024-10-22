@@ -8,8 +8,9 @@ from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langserve import add_routes
 from langchain_core.runnables import Runnable
 
-from chat import chain as chat_chain
-from rag import rag_chain
+# from chat import chain as chat_chain
+# from rag import rag_chain
+from rag import all_chain
 
 import logging
 
@@ -29,34 +30,38 @@ app.add_middleware(
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @app.get("/")
 async def redirect_root_to_docs():
     return RedirectResponse("/main/playground")
 
+
 class InputChat(BaseModel):
     """Input for the chat endpoint."""
+
     messages: List[Union[HumanMessage, AIMessage, SystemMessage]] = Field(
         ...,
         description="The chat messages representing the current situation.",
     )
 
 
-add_routes(
-    app,
-    chat_chain.with_types(input_type=InputChat),
-    path="/chat",
-    enable_feedback_endpoint=True,
-    #enable_public_trace_link_endpoint=True,
-    playground_type="chat",
-)
+# add_routes(
+#     app,
+#     chat_chain.with_types(input_type=InputChat),
+#     path="/chat",
+#     enable_feedback_endpoint=True,
+#     #enable_public_trace_link_endpoint=True,
+#     playground_type="chat",
+# )
 
 
 add_routes(
     app,
-    rag_chain.with_types(input_type=InputChat),
+    # rag_chain.with_types(input_type=InputChat),
+    all_chain.with_types(input_type=InputChat),
     path="/main",
     enable_feedback_endpoint=True,
-    #enable_public_trace_link_endpoint=True,
+    # enable_public_trace_link_endpoint=True,
     playground_type="chat",
 )
 
