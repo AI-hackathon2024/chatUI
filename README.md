@@ -65,8 +65,8 @@
 ## Getting Started
 ### 1. **Clone the Repository:**
 ```bash
-git clone https://github.com/seongyeon1/Fraiday.git
-cd Fraiday
+git clone https://github.com/AI-hackathon2024/chatUI.git
+cd ChatUI
 ```
 ### 2. Setup
 #### 2-1 **Using Makefile**
