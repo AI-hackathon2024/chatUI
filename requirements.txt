@@ -9,7 +9,7 @@ langchain-chroma
 langserve
 sentence-transformers
 sse-starlette
-python-dotenv
+# python-dotenv
 predibase
 
 # openai==0.28.1  # Rust 의존성 이전 버전
