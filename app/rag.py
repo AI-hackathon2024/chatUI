@@ -11,7 +11,6 @@ if not os.path.exists(log_dir):
 
 log_file_path = os.path.join(log_dir, "app.log")
 
-
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -77,7 +76,7 @@ _result2 = rag_chain
 
 def initial_classification(input_data):
 
-    global model_check_flag, _result
+    global model_check_flag, _result, _result2
     # {'messages': {'messages': [HumanMessage(content='산불금지')]}, 'context': ''}
     print("2번째 대화")
     sys.stdout.flush()  # 버퍼를 비워 즉시 출력
@@ -100,7 +99,7 @@ def initial_classification(input_data):
         _result = clf_result["predicted_class"]
         model_check_flag = True
     except requests.exceptions.RequestException as e:
-        # logger.error(f"Error during API call: {e}")
+        print(f"Error during API call: {e}")
         _result = -1  # 오류 발생 시 기본값 설정
         # 문자열로 반환
 
@@ -108,12 +107,12 @@ def initial_classification(input_data):
     sys.stdout.flush()  # 버퍼를 비워 즉시 출력
     print(f"입력값 ? :{message_content}")
 
-    if message_content == "배가 고파":
-        _result = 0
-    if message_content == "감기에 걸려서 콧물과 발열이나":
-        _result = 1
-    if message_content == "심정지 또는 심한 호흡 곤란이 있어":
-        _result = 2
+    # if message_content == "배가 고파":
+    #     _result = 0
+    # if message_content == "감기에 걸려서 콧물과 발열이나":
+    #     _result = 1
+    # if message_content == "심정지 또는 심한 호흡 곤란이 있어":
+    #     _result = 2
 
     if _result == 0:
         _result2 = rag_chain
@@ -121,6 +120,8 @@ def initial_classification(input_data):
         _result2 = rag_chain
     elif _result == 2:
         _result2 = prompt_engineering_chain
+    else:  # -1일 떄
+        print("응급여부 분류 모델이 정상적으로 연결되지 않았습니다")
 
     print("3번째 대화")
     sys.stdout.flush()  # 버퍼를 비워 즉시 출력

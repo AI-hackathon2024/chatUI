@@ -12,6 +12,7 @@ sse-starlette
 python-dotenv
 predibase
 
+# openai==0.28.1  # Rust 의존성 이전 버전
 openai
 tiktoken
 chromadb

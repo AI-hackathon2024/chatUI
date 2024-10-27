@@ -69,6 +69,7 @@ git clone https://github.com/AI-hackathon2024/chatUI.git
 cd ChatUI
 ```
 ### 2. Setup
+- Python version : 3.12
 #### 2-1 **Using Makefile**
 To start the application for the first time:
 ```bash
