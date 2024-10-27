@@ -3,6 +3,8 @@ services:
   app:
     build:
       context: .
+      platforms:
+        - linux/amd64
       args:
         - UPSTAGE_API_KEY=${UPSTAGE_API_KEY}
     ports:

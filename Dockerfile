@@ -36,4 +36,6 @@ RUN make ocr && make chunk
 EXPOSE 8000
 
 # 앱 실행
-CMD ["/bin/bash", "-c", "source .venv/bin/activate && python app/main.py"]
+# RUN make rerun
+CMD ["make", "rerun"]
+
