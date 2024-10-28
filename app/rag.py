@@ -25,12 +25,17 @@ from langchain_upstage import ChatUpstage, UpstageEmbeddings
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from typing import Dict, Any
 
+from langchain_openai import ChatOpenAI, OpenAI
 
 dotenv.load_dotenv()
+
 llm = ChatUpstage(
     api_key=os.getenv("UPSTAGE_API_KEY"),
-    temperature=0,
+    temperature=0.1,
 )
+
+# os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+# llm = ChatOpenAI(temperature=0, model_name="gpt-4o-mini")
 
 # logging.basicConfig(
 #     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -59,7 +64,7 @@ rag_prompt = ChatPromptTemplate.from_template(RAG_PROMPT_TEMPLATE)
 pre_ktas_prompt = ChatPromptTemplate.from_messages(
     [
         SystemMessagePromptTemplate.from_template(system_template),
-        AIMessagePromptTemplate.from_template(few_shot_template),
+        # AIMessagePromptTemplate.from_template(few_shot_template),
         HumanMessagePromptTemplate.from_template("{messages}"),
         AIMessagePromptTemplate.from_template(
             """
