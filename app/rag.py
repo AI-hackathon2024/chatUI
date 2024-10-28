@@ -20,7 +20,10 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from typing import Dict, Any
 
 dotenv.load_dotenv()
-llm = ChatUpstage(api_key=os.getenv("UPSTAGE_API_KEY"))
+llm = ChatUpstage(
+    api_key=os.getenv("UPSTAGE_API_KEY"),
+    temperature=0.5,
+)
 
 # logging.basicConfig(
 #     level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
