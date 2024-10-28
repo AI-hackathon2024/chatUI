@@ -12,17 +12,24 @@ if not os.path.exists(log_dir):
 log_file_path = os.path.join(log_dir, "app.log")
 
 from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate, ChatPromptTemplate
+from langchain.prompts import (
+    PromptTemplate,
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+    AIMessagePromptTemplate,
+)
 from langchain_core.output_parsers import StrOutputParser
 from langchain.vectorstores import Chroma
 from langchain_upstage import ChatUpstage, UpstageEmbeddings
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from typing import Dict, Any
 
+
 dotenv.load_dotenv()
 llm = ChatUpstage(
     api_key=os.getenv("UPSTAGE_API_KEY"),
-    temperature=0.5,
+    temperature=0,
 )
 
 # logging.basicConfig(
@@ -40,10 +47,31 @@ vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedd
 retriever = vectordb.as_retriever()
 
 from template.rag_prompt import RAG_PROMPT_TEMPLATE
-from template.pre_ktas_prompt import PRE_KTAS_PROMPT_TEMPLATE
+from template.pre_ktas_prompt import (
+    PRE_KTAS_PROMPT_TEMPLATE,
+    system_template,
+    few_shot_template,
+)
 
 rag_prompt = ChatPromptTemplate.from_template(RAG_PROMPT_TEMPLATE)
-pre_ktas_prompt = ChatPromptTemplate.from_template(PRE_KTAS_PROMPT_TEMPLATE)
+# pre_ktas_prompt = ChatPromptTemplate.from_template(PRE_KTAS_PROMPT_TEMPLATE)
+
+pre_ktas_prompt = ChatPromptTemplate.from_messages(
+    [
+        SystemMessagePromptTemplate.from_template(system_template),
+        AIMessagePromptTemplate.from_template(few_shot_template),
+        HumanMessagePromptTemplate.from_template("{messages}"),
+        AIMessagePromptTemplate.from_template(
+            """
+    제공해주신 정보를 바탕으로 KTAS 단계를 평가하고 필요한 조치를 안내해드리겠습니다:
+
+    1. KTAS 단계 판정
+    2. 필요한 응급 조치 안내
+    3. 이송 필요성 평가
+    """
+        ),
+    ]
+)
 
 
 def format_docs(docs):
